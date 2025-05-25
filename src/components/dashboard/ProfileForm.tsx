@@ -1,12 +1,18 @@
 // src/components/dashboard/ProfileForm.tsx
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@/lib/useUser";
 
 export default function ProfileForm() {
   const { user } = useUser();
-  const [profile, setProfile] = useState<any>(null);
+  type Profile = {
+    username: string;
+    avatar_url: string;
+    role: string;
+  };
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
@@ -31,6 +37,11 @@ export default function ProfileForm() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    if (!user) {
+      setMessage("Usuario no autenticado.");
+      setLoading(false);
+      return;
+    }
     const { error } = await supabase.from("profiles").update({
       username,
       avatar_url: avatarUrl,
@@ -48,7 +59,7 @@ export default function ProfileForm() {
   return (
     <form onSubmit={handleSave} className="max-w-md mx-auto flex flex-col gap-4 bg-white p-6 rounded shadow">
       <div className="flex flex-col items-center gap-2">
-        <img
+        <Image 
           src={avatarUrl || "/avatar-placeholder.png"}
           alt="Avatar"
           className="w-20 h-20 rounded-full border object-cover"
@@ -72,7 +83,7 @@ export default function ProfileForm() {
       </label>
       <div className="flex flex-col gap-1">
         <span className="font-medium">Correo electrónico</span>
-        <span className="bg-gray-100 rounded p-2">{user.email}</span>
+        <span className="bg-gray-100 rounded p-2">{user?.email ?? "Sin correo"}</span>
       </div>
       <div className="flex flex-col gap-1">
         <span className="font-medium">Rol</span>

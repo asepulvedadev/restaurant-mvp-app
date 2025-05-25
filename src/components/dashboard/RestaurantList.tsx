@@ -20,6 +20,11 @@ export default function RestaurantList() {
 
   const fetchRestaurants = async () => {
     setLoading(true);
+    if (!user) {
+      setRestaurants([]);
+      setLoading(false);
+      return;
+    }
     const { data } = await supabase
       .from("restaurants")
       .select("id, name, description, address, phone, created_at")

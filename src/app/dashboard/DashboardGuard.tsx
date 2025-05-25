@@ -18,7 +18,7 @@ export default function DashboardGuard({ children }: { children: React.ReactNode
         .select("role")
         .eq("id", user.id)
         .single()
-        .then(({ data, error }) => {
+        .then(({ data }) => {
           setRole(data?.role || null);
           setLoading(false);
         });

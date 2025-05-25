@@ -2,6 +2,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import Image from "next/image";
 
 type MenuItem = {
   id: string;
@@ -29,7 +30,7 @@ export default function MenuList({ refresh }: { refresh: number }) {
 
   useEffect(() => {
     fetchItems();
-    // eslint-disable-next-line
+
   }, [refresh]);
 
   return (
@@ -45,7 +46,7 @@ export default function MenuList({ refresh }: { refresh: number }) {
             <li key={item.id} className="border rounded p-3 bg-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div className="flex items-center gap-4">
                 {item.image_url && (
-                  <img src={item.image_url} alt={item.name} className="w-16 h-16 object-cover rounded" />
+                  <Image src={item.image_url} alt={item.name} width={64} height={64} className="w-16 h-16 object-cover rounded" />
                 )}
                 <div>
                   <div className="font-bold text-lg">{item.name}</div>

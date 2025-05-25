@@ -17,6 +17,11 @@ export default function RestaurantForm({ onCreated }: { onCreated: () => void })
     e.preventDefault();
     setLoading(true);
     setMessage("");
+    if (!user) {
+      setMessage("Usuario no autenticado.");
+      setLoading(false);
+      return;
+    }
     const { error } = await supabase.from("restaurants").insert({
       name,
       description,
